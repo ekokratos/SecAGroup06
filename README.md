@@ -15,3 +15,8 @@ Name    : Shehzeeb
 Roll No : 2020SP93021
 Bits ID : 2020sp93021@wilp.bits-pilani.ac.in
 Git ID  : Shehzeeb76
+
+Name    : Adithya M Suvarna
+Roll No : 2020SP93086
+Bits ID : 2020sp93086@wilp.bits-pilani.ac.in
+Git ID  : ekokratos
