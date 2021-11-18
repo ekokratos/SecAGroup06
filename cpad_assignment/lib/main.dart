@@ -1,13 +1,20 @@
-import 'package:cpad_assignment/ui/screens/login/login.dart';
+import 'package:cpad_assignment/provider/members_provider.dart';
+import 'package:cpad_assignment/ui/screens/login/login_screen.dart';
+import 'package:cpad_assignment/ui/screens/splash_screen.dart';
+import 'package:cpad_assignment/utility/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) async {
+    await AppData.getInstance(); //init Shared Pref
     runApp(
       const MyApp(),
     );
@@ -19,16 +26,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'CPAD Assignment',
-      navigatorObservers: [BotToastNavigatorObserver()],
-      builder: BotToastInit(),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MembersProvider(),
+        ),
+      ],
+      child: GetMaterialApp(
+        title: 'CPAD Assignment',
+        navigatorObservers: [BotToastNavigatorObserver()],
+        builder: BotToastInit(),
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: SplashScreen(),
       ),
-      home: LoginPage(),
     );
   }
 }
-
-
