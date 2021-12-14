@@ -4,6 +4,7 @@ import 'package:cpad_assignment/services/user_service.dart';
 import 'package:cpad_assignment/ui/screens/home_screen/widgets/user_card.dart';
 import 'package:cpad_assignment/ui/screens/login/login_screen.dart';
 import 'package:cpad_assignment/ui/screens/members_screen/members_screen.dart';
+import 'package:cpad_assignment/ui/screens/mom_screen/mom_screen.dart';
 import 'package:cpad_assignment/ui/styles.dart';
 import 'package:cpad_assignment/ui/widgets/custom_outlined_button.dart';
 import 'package:cpad_assignment/utility/app_data.dart';
@@ -103,6 +104,16 @@ class HomeData extends StatelessWidget {
                 text: 'Members',
                 onPressed: () {
                   Get.to(() => MembersScreen());
+                },
+              ),
+            ),
+            SizedBox(height: SizeConfig.blockSizeHorizontal * 4),
+            Container(
+              width: double.infinity,
+              child: CustomOutlineButton(
+                text: 'MoMs',
+                onPressed: () {
+                  Get.to(() => MOMScreen());
                 },
               ),
             ),
