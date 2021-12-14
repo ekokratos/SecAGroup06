@@ -1,6 +1,7 @@
 import 'package:cpad_assignment/provider/members_provider.dart';
 import 'package:cpad_assignment/ui/screens/login/login_screen.dart';
 import 'package:cpad_assignment/provider/mom_provider.dart';
+import 'package:cpad_assignment/provider/poll_provider.dart';
 import 'package:cpad_assignment/ui/screens/splash_screen.dart';
 import 'package:cpad_assignment/utility/app_data.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => MOMProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => PollProvider(),
+        )
       ],
       child: GetMaterialApp(
         title: 'CPAD Assignment',
