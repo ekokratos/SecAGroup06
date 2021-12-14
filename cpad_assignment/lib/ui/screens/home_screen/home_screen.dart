@@ -5,6 +5,7 @@ import 'package:cpad_assignment/ui/screens/home_screen/widgets/user_card.dart';
 import 'package:cpad_assignment/ui/screens/login/login_screen.dart';
 import 'package:cpad_assignment/ui/screens/members_screen/members_screen.dart';
 import 'package:cpad_assignment/ui/screens/mom_screen/mom_screen.dart';
+import 'package:cpad_assignment/ui/screens/polls_screen/polls_screen.dart';
 import 'package:cpad_assignment/ui/styles.dart';
 import 'package:cpad_assignment/ui/widgets/custom_outlined_button.dart';
 import 'package:cpad_assignment/utility/app_data.dart';
@@ -22,10 +23,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future _fetchUser;
+
   @override
   void initState() {
     super.initState();
     _fetchUser = UserService.getUser();
+
+    _fetchUser.then((user) {
+      if (!user.isAdmin) if (user.isRejected)
+        Get.off(() => RejectScreen());
+      else if (!user.isVerified) Get.off(() => VerificationScreen());
+    });
   }
 
   @override
@@ -43,10 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.hasError) {
                   BotToast.closeAllLoading();
                   print("[Error]: ${snapshot.error}");
-                  return Text(snapshot.error.toString());
+                  return Scaffold(body: Text(snapshot.error.toString()));
                 } else {
                   BotToast.closeAllLoading();
-                  // print(AppData.getUser());
                   AppUser appUser = AppData.getUser()!;
                   return HomeData(appUser: appUser);
                 }
@@ -69,7 +76,8 @@ class HomeData extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        titleTextStyle: TextStyle(fontSize: kLargeText, fontWeight: kBold),
+        titleTextStyle: TextStyle(
+            fontSize: kLargeText, fontWeight: kBold, color: Colors.white),
         title: Text("Hello ${appUser.name ?? ''}"),
         automaticallyImplyLeading: false,
         actions: [
@@ -114,6 +122,16 @@ class HomeData extends StatelessWidget {
                 text: 'MoMs',
                 onPressed: () {
                   Get.to(() => MOMScreen());
+                },
+              ),
+            ),
+            SizedBox(height: SizeConfig.blockSizeHorizontal * 4),
+            Container(
+              width: double.infinity,
+              child: CustomOutlineButton(
+                text: 'Polls',
+                onPressed: () {
+                  Get.to(() => PollsScreen());
                 },
               ),
             ),
