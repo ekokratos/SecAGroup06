@@ -36,6 +36,28 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  _resetPassword() async {
+    if (_emailController.text.isEmpty) {
+      Utility.showSnackBar(
+          title: 'Email required', message: 'Please enter an email.');
+    } else {
+      BotToast.showLoading();
+
+      await FirebaseService.resetPassword(email: _emailController.text)
+          .then((_) {
+        BotToast.closeAllLoading();
+        Utility.showSnackBar(
+            isError: false,
+            title: 'Password Reset',
+            message: 'Password reset link sent to the registered email.');
+      }).catchError((e) {
+        BotToast.closeAllLoading();
+        print('[Error]: $e');
+        Utility.showSnackBar(isError: true, message: e.message);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _passwordController,
               hintText: 'Password',
               obscureText: true,
+            ),
+            SizedBox(height: SizeConfig.blockSizeHorizontal),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {
+                  _resetPassword();
+                },
+                child: Text(
+                  'Forgot password?',
+                  style: TextStyle(color: kPrimaryColor, fontSize: kNormalText),
+                ),
+              ),
             ),
             SizedBox(height: SizeConfig.blockSizeHorizontal * 8),
             Container(
@@ -94,6 +129,52 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
+            Text('Or',
+                style: TextStyle(color: kPrimaryColor, fontSize: kMediumText)),
+            SizedBox(height: SizeConfig.blockSizeHorizontal * 3),
+            Container(
+              width: SizeConfig.screenWidth * 0.8,
+              child: RawMaterialButton(
+                visualDensity: VisualDensity.standard,
+                fillColor: Colors.white,
+                padding: EdgeInsets.symmetric(
+                  vertical: SizeConfig.blockSizeVertical * 1.6,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                elevation: 2,
+                onPressed: () async {
+                  BotToast.showLoading();
+                  await FirebaseService.signInWithGoogle().then((_) {
+                    BotToast.closeAllLoading();
+                    Get.off(() => HomeScreen());
+                  }).catchError((e) {
+                    BotToast.closeAllLoading();
+                    print('[Error]: $e');
+                    Utility.showSnackBar(isError: true, message: e.message);
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image(
+                      image: AssetImage("assets/google_logo.png"),
+                      height: 25.0,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      'Sign in with Google',
+                      style: TextStyle(
+                        fontSize: kMediumText,
+                        color: kPrimaryColor,
+                        fontWeight: kBold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),

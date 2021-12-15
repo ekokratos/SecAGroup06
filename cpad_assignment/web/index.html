@@ -20,13 +20,15 @@
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
 
+  <meta name="google-signin-client_id" content="48940756814-1cp28iihjrtn97cifniem6r2nbtlv65l.apps.googleusercontent.com">
+
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="cpad_assignment">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <title>cpad_assignment</title>
+  <title>Association App</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -96,6 +98,35 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+
+  </script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+
+    <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyDgyDaKzjg_kq91O6vHIeAqL_oFsMfUoPM",
+      authDomain: "bits-60b3c.firebaseapp.com",
+      projectId: "bits-60b3c",
+      storageBucket: "bits-60b3c.appspot.com",
+      messagingSenderId: "48940756814",
+      appId: "1:48940756814:web:a5abf613dd94a052a1b81f",
+      measurementId: "G-CCHE7TNZ53"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.getAnalytics(app);
   </script>
 </body>
 </html>

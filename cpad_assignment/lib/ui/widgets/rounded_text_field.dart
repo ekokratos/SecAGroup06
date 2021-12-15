@@ -13,8 +13,10 @@ class RoundedTextField extends StatelessWidget {
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
   final Function? onTap;
+  final int maxLines;
+  final ValueChanged<String>? onChanged;
 
-  const RoundedTextField({
+  RoundedTextField({
     Key? key,
     this.hintText,
     this.prefixText,
@@ -25,6 +27,8 @@ class RoundedTextField extends StatelessWidget {
     this.onTap,
     this.isReadOnly = false,
     this.obscureText = false,
+    this.maxLines = 1,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -44,6 +48,8 @@ class RoundedTextField extends StatelessWidget {
         controller: controller,
         readOnly: isReadOnly,
         obscureText: obscureText,
+        maxLines: maxLines,
+        onChanged: onChanged,
         style: TextStyle(
           fontSize: kMediumText,
           letterSpacing: 0.6,

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cpad_assignment/models/user.dart';
 import 'package:cpad_assignment/services/firebase_service.dart';
 import 'package:cpad_assignment/utility/app_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserService {
   static CollectionReference usersCollectionReference =
@@ -31,6 +32,25 @@ class UserService {
               merge: true,
             ),
           );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  static Future<void> addGoogleUser({required User user}) async {
+    try {
+      await usersCollectionReference.doc(FirebaseService.currentUserId).set(
+        {
+          'id': user.uid,
+          'name': user.displayName,
+          'email': user.email,
+          'mobileNumber': user.phoneNumber
+        },
+        SetOptions(
+          merge: true,
+        ),
+      );
     } catch (e) {
       print(e);
       throw e;

@@ -1,10 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class Utility {
   static showSnackBar(
-      {String message = '', String title = '', bool isError = true}) {
+      {String message = '', String title = '', bool isError = false}) {
     Get.snackbar(
       isError ? 'Error' : title,
       message,
@@ -29,5 +30,17 @@ class Utility {
       crossPage: true,
       textStyle: TextStyle(color: Colors.white),
     );
+  }
+
+  static String getTimeStamp(
+      {required String unformattedDate, bool showTime = true}) {
+    DateTime convertedDateTime = DateTime.parse(unformattedDate);
+    DateFormat formatter;
+    if (showTime)
+      formatter = DateFormat('dd/MM/yyyy').add_jm();
+    else
+      formatter = DateFormat('dd/MM/yyyy');
+    String _date = formatter.format(convertedDateTime);
+    return _date;
   }
 }

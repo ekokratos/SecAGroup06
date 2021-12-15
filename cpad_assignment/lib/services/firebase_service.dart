@@ -2,6 +2,9 @@ import 'package:cpad_assignment/models/user.dart';
 import 'package:cpad_assignment/services/user_service.dart';
 import 'package:cpad_assignment/utility/app_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class FirebaseService {
   static String? get currentUserId => FirebaseAuth.instance.currentUser?.uid;
@@ -60,7 +63,82 @@ class FirebaseService {
     }
   }
 
+  static Future<void> resetPassword({required String email}) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      String errCode = e.code;
+      if (errCode == 'invalid-email') {
+        throw FormatException('Invalid email');
+      } else if (errCode == 'user-not-found') {
+        throw FormatException('User not Found.');
+      }
+    }
+  }
+
   static Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut().then((_) => AppData.clearSP());
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      if (!kIsWeb) {
+        await googleSignIn.signOut();
+      }
+      await FirebaseAuth.instance.signOut().then((_) => AppData.clearSP());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<User?> signInWithGoogle() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+
+    if (kIsWeb) {
+      GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithPopup(authProvider);
+
+        user = userCredential.user;
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        try {
+          final UserCredential userCredential =
+              await auth.signInWithCredential(credential);
+
+          user = userCredential.user;
+          print('User: $user');
+
+          await UserService.addGoogleUser(user: user!);
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'account-exists-with-different-credential') {
+            throw FormatException(
+                'Account already exists with a different credential.');
+          } else if (e.code == 'invalid-credential') {
+            throw FormatException('Invalid credential');
+          }
+        } catch (e) {
+          throw FormatException('Something went wrong. Please try again.');
+        }
+      }
+    }
+
+    return user;
   }
 }
