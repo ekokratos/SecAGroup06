@@ -12,6 +12,7 @@ class Concerns {
 class Concern {
   String? id;
   String? userID;
+  String? userName;
   String? title;
   String? content;
   String? date;
@@ -23,17 +24,19 @@ class Concern {
     this.content,
     this.date,
     this.isResolved,
+    this.userName,
     this.title,
   });
 
   @override
   String toString() {
-    return 'Concern{id: $id, userID: $userID, content: $content, date: $date, isResolved: $isResolved}';
+    return 'Concern{id: $id, userID: $userID, content: $content, date: $date, isResolved: $isResolved, userName: $userName}';
   }
 
   factory Concern.fromJson(Map<String, dynamic> json) => Concern(
         id: json['id'] == null ? '' : json['id'],
         userID: json['userID'] == null ? '' : json['userID'],
+        userName: json['userName'] == null ? '' : json['userName'],
         title: json['title'] == null ? '' : json['title'],
         content: json['content'] == null ? '' : json['content'],
         date: json['date'] == null ? '' : json['date'],
@@ -44,6 +47,7 @@ class Concern {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
     data['userID'] = this.userID;
+    data['userName'] = this.userName;
     data['title'] = this.title;
     data['content'] = this.content;
     data['date'] = this.date;
