@@ -130,6 +130,7 @@ class _ConcernBottomSheetState extends State<ConcernBottomSheet> {
                           Concern _newConcern = Concern(
                               userID:
                                   _user?.id ?? FirebaseService.currentUserId,
+                              userName: _user?.name ?? 'Name',
                               title: _titleController.text,
                               content: _concernController.text,
                               date: _pickedDate.toIso8601String(),
